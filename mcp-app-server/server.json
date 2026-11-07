@@ -1,0 +1,25 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.draw/mcp",
+  "title": "draw.io",
+  "description": "Create draw.io diagrams in chat from Mermaid or XML, shown live and interactive. 10,000+ shapes.",
+  "repository": {
+    "url": "https://github.com/jgraph/drawio-mcp",
+    "source": "github"
+  },
+  "version": "1.1.1",
+  "websiteUrl": "https://www.drawio.com",
+  "icons": [
+    {
+      "src": "https://www.drawio.com/img/logo.svg",
+      "mimeType": "image/svg+xml",
+      "sizes": ["any"]
+    }
+  ],
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://mcp.draw.io/mcp"
+    }
+  ]
+}

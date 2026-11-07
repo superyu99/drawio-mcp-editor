@@ -1,0 +1,53 @@
+{
+  "name": "@drawio/mcp",
+  "version": "1.7.0",
+  "description": "Official draw.io MCP server for LLMs - Open diagrams in draw.io editor",
+  "type": "module",
+  "main": "src/index.js",
+  "bin": {
+    "drawio-mcp": "./src/index.js"
+  },
+  "scripts": {
+    "copy-shared": "cp ../shared/xml-reference.md src/xml-reference.md && cp ../shared/xml-essentials.md src/xml-essentials.md && cp ../shared/mermaid-reference.md src/mermaid-reference.md && cp ../shared/shape-search.js src/shape-search.js && cp ../shared/icon-search.js src/icon-search.js && cp ../shared/mermaid-elk.js src/mermaid-elk.js && cp ../shared/mx-model.js src/mx-model.js && cp ../shared/mx-xml.js src/mx-xml.js && cp ../shared/normalize-model.js src/normalize-model.js && cp ../shared/repair-xml.js src/repair-xml.js",
+    "start": "node src/index.js",
+    "prestart": "npm run copy-shared",
+    "prepack": "npm run copy-shared",
+    "postinstall": "node src/postinstall.js",
+    "test": "node --test"
+  },
+  "keywords": [
+    "mcp",
+    "drawio",
+    "draw.io",
+    "diagrams",
+    "mermaid",
+    "csv",
+    "xml",
+    "llm",
+    "claude",
+    "anthropic"
+  ],
+  "author": "draw.io Ltd",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jgraph/drawio-mcp.git"
+  },
+  "homepage": "https://github.com/jgraph/drawio-mcp#readme",
+  "bugs": {
+    "url": "https://github.com/jgraph/drawio-mcp/issues"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.27.1",
+    "pako": "^2.1.0"
+  },
+  "files": [
+    "src",
+    "vendor",
+    "README.md",
+    "LICENSE"
+  ]
+}

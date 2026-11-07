@@ -1,0 +1,68 @@
+name = "drawio-mcp-app"
+main = "src/worker.js"
+compatibility_date = "2024-12-01"
+compatibility_flags = ["nodejs_compat"]
+# workers.dev name is disabled in CF for production; keep it off
+workers_dev = false
+
+# The dash-managed route only covers mcp.draw.io/mcp* — every other path the
+# Worker serves (/carousel/*, /health, ...) needs its own route or requests 522
+# against a nonexistent origin.
+routes = [
+  { pattern = "mcp.draw.io/mcp*", zone_name = "draw.io" },
+  { pattern = "mcp.draw.io/carousel/*", zone_name = "draw.io" },
+  { pattern = "mcp.draw.io/.well-known/*", zone_name = "draw.io" },
+  { pattern = "mcp.draw.io/demo/*", zone_name = "draw.io" },
+  { pattern = "mcp.draw.io/health", zone_name = "draw.io" },
+  { pattern = "mcp.draw.io/favicon.ico", zone_name = "draw.io" },
+  { pattern = "mcp.draw.io/favicon.png", zone_name = "draw.io" }
+]
+
+# OpenAI plugin-directory domain verification token, served verbatim at
+# /.well-known/openai-apps-challenge. The portal generates it per plugin and
+# fetches it from there; it is public by design, not a secret, so it lives here
+# rather than in `wrangler secret` — a redeploy from a fresh checkout keeps the
+# domain verified. Unset = the path 404s.
+[vars]
+OPENAI_APPS_CHALLENGE = "1RMejSOHTziuX6-KVs-f0s2jd-Gqdb52E4PACeZ4Res"
+
+[build]
+command = "node src/build-html.js"
+
+# Static assets (directory listing in the connectors-directory carousel).
+# Requests matching a file under public/ are served directly; everything
+# else (e.g. /mcp) falls through to the Worker.
+[assets]
+directory = "./public"
+
+# One object per MCP session, holding only the "client fetched the app
+# resource" flag, and only reached by clients that didn't declare the UI
+# capability. /mcp itself is served statelessly by the Worker (see worker.js).
+# The class name dates from when these objects held the sessions; keeping it
+# avoids a migration.
+[[durable_objects.bindings]]
+name = "MCP_SESSION_MANAGER"
+class_name = "MCPSessionManager"
+
+# Migrations already applied in production (v1-v3)
+# No new migrations needed - MCPSessionManager already exists
+[[migrations]]
+tag = "v3"
+
+[env.staging]
+name = "drawio-mcp-app-staging"
+# routes are INHERITABLE in wrangler: without this override a staging
+# deploy would claim production's mcp.draw.io routes and steal traffic.
+routes = []
+workers_dev = true
+
+[[env.staging.durable_objects.bindings]]
+name = "MCP_SESSION_MANAGER"
+class_name = "MCPSessionManager"
+
+[[env.staging.migrations]]
+tag = "v1"
+new_classes = ["MCPSessionManager"]
+
+[env.staging.assets]
+directory = "./public"

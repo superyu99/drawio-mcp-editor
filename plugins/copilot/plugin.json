@@ -1,0 +1,22 @@
+{
+  "name": "drawio",
+  "description": "Generate native .drawio diagrams from GitHub Copilot — author as Mermaid or XML with optional ELK auto-layout, export PNG/SVG/PDF with embedded XML, or open via app.diagrams.net URL.",
+  "version": "1.2.3",
+  "author": {
+    "name": "draw.io",
+    "url": "https://www.drawio.com"
+  },
+  "homepage": "https://github.com/jgraph/drawio-mcp/tree/main/plugins/copilot",
+  "repository": "https://github.com/jgraph/drawio-mcp",
+  "license": "Apache-2.0",
+  "keywords": [
+    "draw.io",
+    "diagrams",
+    "mermaid",
+    "flowcharts",
+    "xml"
+  ],
+  "skills": [
+    "skills/"
+  ]
+}
